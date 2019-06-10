@@ -15,9 +15,9 @@ import twitter.objetos.Tweet;
  * @author mtayllan
  */
 public interface ITwitter {
-    public void criarPerfil(Perfil usario) throws PEException;
+    public void criarPerfil(Perfil usario);
     public void cancelarPerfil(String usuario) throws PIException, PDException;
-    public void tweetar(String usuario, String mensagem) throws PIException, MFPException;
+    public void tweetar(String usuario, String mensagem) throws PIException, MFPException, PDException;
     public Vector<Tweet> timeline(String usuario) throws PIException, PDException;
     public Vector<Tweet> tweets(String usuario) throws PIException, PDException;
     public void seguir(String seguidor, String seguido) throws PIException, PDException, SIException;

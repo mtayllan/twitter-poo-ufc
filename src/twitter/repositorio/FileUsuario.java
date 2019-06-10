@@ -5,6 +5,13 @@
  */
 package twitter.repositorio;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Vector;
 import twitter.excecoes.UJCException;
 import twitter.excecoes.UNCException;
@@ -15,10 +22,24 @@ import twitter.objetos.Perfil;
  * @author mtayllan
  */
 public class FileUsuario implements IRepositorioUsuario{
+    private File file;
     private Vector<Perfil> usuarios;
     
     public FileUsuario(){
-        usuarios = new Vector();
+        file = new File("twitter.db");
+        try{
+            FileInputStream fi = new FileInputStream(file);
+            ObjectInputStream oi = new ObjectInputStream(fi);
+            usuarios = (Vector<Perfil>) oi.readObject();
+            oi.close();
+            fi.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Dados não encontrados.");
+        } catch (IOException e) {
+            System.out.println("Erro ao inicializar o fluxo.");
+        } catch (ClassNotFoundException ex) {
+            System.out.println("Ocorreu um erro interno na inicialização do sistema.");
+        }
     }
 
     @Override
@@ -45,6 +66,24 @@ public class FileUsuario implements IRepositorioUsuario{
             antigo = usuario;
         }else{
             throw new UNCException(usuario.getUsuario());
+        }
+    }
+    
+    public Vector<Perfil> getUsuarios(){
+        return usuarios;
+    }
+    
+    public void gravar(){
+        try {
+            FileOutputStream f = new FileOutputStream(file);
+            ObjectOutputStream o = new ObjectOutputStream(f);
+            o.writeObject(usuarios);
+            o.close();
+            f.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Dados não encontrados.");
+        } catch (IOException e) {
+            System.out.println("Erro ao inicializar o fluxo.");
         }
     }
     

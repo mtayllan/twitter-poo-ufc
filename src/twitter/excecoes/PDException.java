@@ -10,7 +10,7 @@ package twitter.excecoes;
  * @author mtayllan
  */
 public class PDException extends Exception{
-    public PDException(){
-        super("O perfil está desativado.");
+    public PDException(String usuario){
+        super("O perfil " + usuario + " está desativado.");
     }
 }

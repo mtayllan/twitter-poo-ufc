@@ -1,4 +1,4 @@
-package twitter.objects;
+package twitter.objetos;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -14,6 +14,7 @@ public class PessoaFisica extends Perfil {
     
     private long cpf;
 
+    
     public PessoaFisica(String usuario) {
         super(usuario);
     }

@@ -9,8 +9,8 @@ package twitter.excecoes;
  *
  * @author mtayllan
  */
-public class UJCException extends Exception{
-    public UJCException(String usuario){
-        super("O usuário já existe: " + usuario);
+public class MFPException extends Exception{
+    public MFPException(String mensagem){
+        super("Mensagem ultrapassa o limite de caracteres. Esperado: 1-140. Fornecido: " + mensagem.length());
     }
 }

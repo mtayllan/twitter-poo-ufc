@@ -6,6 +6,11 @@
 package twitter.servico;
 
 import java.util.Vector;
+import twitter.excecoes.MFPException;
+import twitter.excecoes.PDException;
+import twitter.excecoes.PEException;
+import twitter.excecoes.PIException;
+import twitter.excecoes.SIException;
 import twitter.objetos.Perfil;
 import twitter.objetos.Tweet;
 import twitter.repositorio.IRepositorioUsuario;
@@ -23,42 +28,47 @@ public class MyTwitter implements ITwitter{
     }
 
     @Override
-    public void criarPerfil(Perfil usario) {
+    public void criarPerfil(Perfil usario) throws PEException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void cancelarPerfil(String usuario) {
+    public void cancelarPerfil(String usuario) throws PIException, PDException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void tweetar(String usuario, String mensagem) {
+    public void tweetar(String usuario, String mensagem) throws PIException, MFPException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Vector<Tweet> timeline(String usuario) {
+    public Vector<Tweet> timeline(String usuario) throws PIException, PDException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void seguir(String seguidor, String seguido) {
+    public Vector<Tweet> tweets(String usuario) throws PIException, PDException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public int numeroSeguidores(String usuario) {
+    public void seguir(String seguidor, String seguido) throws PIException, PDException, SIException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Vector<Perfil> seguidores(String usuario) {
+    public int numeroSeguidores(String usuario) throws PIException, PDException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Vector<Perfil> seguidos(String usuario) {
+    public Vector<Perfil> seguidores(String usuario) throws PIException, PDException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Vector<Perfil> seguidos(String usuario) throws PIException, PDException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

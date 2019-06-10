@@ -9,8 +9,8 @@ package twitter.excecoes;
  *
  * @author mtayllan
  */
-public class UJCException extends Exception{
-    public UJCException(String usuario){
-        super("O usuário já existe: " + usuario);
+public class PDException extends Exception{
+    public PDException(){
+        super("O perfil está desativado.");
     }
 }

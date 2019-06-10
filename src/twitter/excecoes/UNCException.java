@@ -10,14 +10,7 @@ package twitter.excecoes;
  * @author mtayllan
  */
 public class UNCException extends Exception{
-    private String usuario;
-    
     public UNCException(String usuario){
-        super("Usuário Inexistente");
-        this.usuario = usuario;
-    }
-    
-    public String getUsuario(){
-        return usuario;
+        super("Usuário Inexistente: " + usuario);
     }
 }

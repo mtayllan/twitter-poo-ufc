@@ -5,6 +5,8 @@
  */
 package twitter.repositorio;
 
+import twitter.excecoes.UJCException;
+import twitter.excecoes.UNCException;
 import twitter.objetos.Perfil;
 
 /**
@@ -12,7 +14,7 @@ import twitter.objetos.Perfil;
  * @author mtayllan
  */
 public interface IRepositorioUsuario {
-    public void cadastrar(Perfil usuario);
+    public void cadastrar(Perfil usuario) throws UJCException;
     public Perfil buscar(String usuario);
-    public void atualizar(Perfil usuario);
+    public void atualizar(Perfil usuario) throws UNCException;
 }

@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import twitter.excecoes.PDException;
 import twitter.excecoes.PIException;
@@ -36,6 +37,8 @@ public class Principal extends javax.swing.JFrame {
         this.myTwitter = myTwitter;
         preencherStatus();
         preencherListaDeUsuarios();
+        preencherTimeLine();
+        preencherMeusTweets();
     }
     
     private void preencherStatus(){
@@ -56,10 +59,50 @@ public class Principal extends javax.swing.JFrame {
             JLabel label = new JLabel();
             label.setHorizontalAlignment(SwingConstants.CENTER);
             label.setText(perfil.getUsuario());
-            label.setMaximumSize(new Dimension(198, 34));
-            label.setSize(198, 34);
+            label.setMaximumSize(new Dimension(1000, 40));
+            label.setSize(1000,40);
             painelUsuarios.add(label);
         }
+    }
+    
+    private void preencherTimeLine(){
+        painelTimeLine.removeAll();
+        Vector<Tweet> tweets;
+        try {
+            tweets = myTwitter.timeline(usuarioLogado);
+            for(Tweet tweet : tweets){
+                JLabel label = new JLabel();
+                label.setText("@" + tweet.getUsuario() + " - " + tweet.getMensagem());
+                label.setMaximumSize(new Dimension(1000, 40));
+                label.setSize(1000,40);
+                painelTimeLine.add(label);
+            }
+        } catch (PIException | PDException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
+        painelTimeLine.updateUI();
+    }
+    
+    private void preencherMeusTweets(){
+        painelTweets.removeAll();
+        Vector<Tweet> tweets;
+        try {
+            tweets = myTwitter.tweets(usuarioLogado);
+            for(Tweet tweet : tweets){
+                JLabel label = new JLabel();
+                label.setText("@" + tweet.getUsuario() + " - " + tweet.getMensagem());
+                label.setMaximumSize(new Dimension(1000, 40));
+                label.setSize(1000,40);
+                painelTweets.add(label);
+            }
+        } catch (PIException | PDException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
+        painelTweets.updateUI();
+    }
+    
+    private void addLabel(JPanel painel, JLabel label){
+        painel.add(label);
     }
 
     /**
@@ -82,6 +125,10 @@ public class Principal extends javax.swing.JFrame {
         botaoSair = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         painelUsuarios = new javax.swing.JPanel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        painelTimeLine = new javax.swing.JPanel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        painelTweets = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -192,28 +239,46 @@ public class Principal extends javax.swing.JFrame {
         painelUsuarios.setLayout(new javax.swing.BoxLayout(painelUsuarios, javax.swing.BoxLayout.Y_AXIS));
         jScrollPane4.setViewportView(painelUsuarios);
 
+        painelTimeLine.setLayout(new javax.swing.BoxLayout(painelTimeLine, javax.swing.BoxLayout.Y_AXIS));
+        jScrollPane5.setViewportView(painelTimeLine);
+
+        painelTweets.setLayout(new javax.swing.BoxLayout(painelTweets, javax.swing.BoxLayout.Y_AXIS));
+        jScrollPane6.setViewportView(painelTweets);
+
         jLayeredPane1.setLayer(jLayeredPane2, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jLayeredPane1.setLayer(jScrollPane4, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(jScrollPane5, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(jScrollPane6, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout jLayeredPane1Layout = new javax.swing.GroupLayout(jLayeredPane1);
         jLayeredPane1.setLayout(jLayeredPane1Layout);
         jLayeredPane1Layout.setHorizontalGroup(
             jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jLayeredPane1Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLayeredPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLayeredPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(32, 32, 32)
+                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(100, Short.MAX_VALUE))
         );
         jLayeredPane1Layout.setVerticalGroup(
             jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jLayeredPane1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLayeredPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -241,6 +306,8 @@ public class Principal extends javax.swing.JFrame {
         String mensagem = JOptionPane.showInputDialog("Digite aqui sua mensagem");
         try {
             myTwitter.timeline(usuarioLogado).add(new Tweet(usuarioLogado, mensagem));
+            preencherTimeLine();
+            preencherMeusTweets();
         } catch (PIException | PDException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
@@ -251,6 +318,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_ativarBotaoActionPerformed
 
     private void botaoSairMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botaoSairMouseClicked
+        myTwitter.gravar();
         this.dispose();
     }//GEN-LAST:event_botaoSairMouseClicked
 
@@ -261,7 +329,11 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JLayeredPane jLayeredPane2;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JButton novoTweet;
+    private javax.swing.JPanel painelTimeLine;
+    private javax.swing.JPanel painelTweets;
     private javax.swing.JPanel painelUsuarios;
     private javax.swing.JLabel seguidoresTxt;
     private javax.swing.JLabel seguindoTxt;

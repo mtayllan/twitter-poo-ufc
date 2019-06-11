@@ -8,6 +8,7 @@ package twitter.servico;
 import java.util.Vector;
 import twitter.excecoes.MFPException;
 import twitter.excecoes.PDException;
+import twitter.excecoes.PEException;
 import twitter.excecoes.PIException;
 import twitter.excecoes.SIException;
 import twitter.excecoes.UJCException;
@@ -27,11 +28,11 @@ public class MyTwitter implements ITwitter{
     }
 
     @Override
-    public void criarPerfil(Perfil usario){
+    public void criarPerfil(Perfil usuario) throws PEException{
         try {
-            repositorio.cadastrar(usario);
+            repositorio.cadastrar(usuario);
         } catch (UJCException ex) {
-            System.out.println(ex.getMessage());
+            throw new PEException(usuario.getUsuario());
         }
     }
 
@@ -79,7 +80,7 @@ public class MyTwitter implements ITwitter{
             throw new PDException(usuario);
         }
         // busca em todas as timelines?
-        Vector<Tweet> tweets = new Vector<Tweet>();
+        Vector<Tweet> tweets = new Vector<>();
         for(Perfil p : repositorio.getUsuarios()){
             for(Tweet tweet : p.getTimeline()){
                 if (tweet.getUsuario().equals(usuario)){
@@ -142,5 +143,15 @@ public class MyTwitter implements ITwitter{
             throw new PDException(usuario);
         }
         return perfil.getSeguidos();
+    }
+    
+    public void logar(String usuario) throws PIException{
+        if(repositorio.buscar(usuario) == null){
+            throw new PIException(usuario);
+        }
+    }
+    
+    public void gravar(){
+        repositorio.gravar();
     }
 }

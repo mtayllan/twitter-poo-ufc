@@ -19,4 +19,5 @@ public interface IRepositorioUsuario {
     public Perfil buscar(String usuario);
     public void atualizar(Perfil usuario) throws UNCException;
     public Vector<Perfil> getUsuarios();
+    public void gravar();
 }

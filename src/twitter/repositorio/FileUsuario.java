@@ -26,9 +26,19 @@ public class FileUsuario implements IRepositorioUsuario{
     private Vector<Perfil> usuarios;
     
     public FileUsuario(){
-        file = new File("twitter.db");
         try{
+            file = new File("twitter.txt");
+            if(!file.exists()){
+                file.createNewFile();
+            }
             FileInputStream fi = new FileInputStream(file);
+            if (fi.read() == -1){
+                usuarios = new Vector<>();
+                return;
+            }else{
+                fi.close();
+                fi = new FileInputStream(file);
+            }
             ObjectInputStream oi = new ObjectInputStream(fi);
             usuarios = (Vector<Perfil>) oi.readObject();
             oi.close();
@@ -37,6 +47,7 @@ public class FileUsuario implements IRepositorioUsuario{
             System.out.println("Dados não encontrados.");
         } catch (IOException e) {
             System.out.println("Erro ao inicializar o fluxo.");
+            e.printStackTrace();
         } catch (ClassNotFoundException ex) {
             System.out.println("Ocorreu um erro interno na inicialização do sistema.");
         }
@@ -44,7 +55,7 @@ public class FileUsuario implements IRepositorioUsuario{
 
     @Override
     public void cadastrar(Perfil usuario) throws UJCException {
-        if (buscar(usuario.getUsuario()) != null){
+        if (buscar(usuario.getUsuario()) == null){
             usuarios.add(usuario);
         }else{
             throw new UJCException(usuario.getUsuario());
@@ -84,6 +95,7 @@ public class FileUsuario implements IRepositorioUsuario{
             System.out.println("Dados não encontrados.");
         } catch (IOException e) {
             System.out.println("Erro ao inicializar o fluxo.");
+            e.printStackTrace();
         }
     }
     

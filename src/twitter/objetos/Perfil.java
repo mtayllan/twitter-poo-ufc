@@ -5,13 +5,14 @@
  */
 package twitter.objetos;
 
+import java.io.Serializable;
 import java.util.Vector;
 
 /**
  *
  * @author mtayllan
  */
-public abstract class Perfil {
+public abstract class Perfil implements Serializable{
     
     private String usuario;
     private Vector<Perfil> seguidos;
@@ -66,6 +67,8 @@ public abstract class Perfil {
         return ativo;
     }
     
-    
-    
+    @Override
+    public String toString() {
+        return "Usuario:" + usuario + "\nStatus: " + ativo;
+    }
 }

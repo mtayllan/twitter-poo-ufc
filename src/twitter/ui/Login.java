@@ -24,6 +24,18 @@ public class Login extends javax.swing.JFrame {
     
     private MyTwitter myTwitter;
 
+    private void logar(){
+        String usuario = campoUsuario.getText();
+        try{
+            myTwitter.logar(usuario);
+            Principal prin = new Principal(usuario, myTwitter);
+            prin.setVisible(true);
+            this.dispose();
+        }catch(PIException ex){ 
+           JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -32,7 +44,6 @@ public class Login extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
         jLayeredPane1 = new javax.swing.JLayeredPane();
         jLabel2 = new javax.swing.JLabel();
@@ -58,6 +69,11 @@ public class Login extends javax.swing.JFrame {
 
         campoUsuario.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         campoUsuario.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        campoUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                campoUsuarioActionPerformed(evt);
+            }
+        });
         jLayeredPane1.add(campoUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 198, 51));
 
         botaoEntrar.setBackground(new java.awt.Color(255, 255, 255));
@@ -103,7 +119,7 @@ public class Login extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
+            .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 258, Short.MAX_VALUE)
         );
 
         setSize(new java.awt.Dimension(219, 258));
@@ -115,21 +131,17 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_botaoSairMouseClicked
 
     private void botaoEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoEntrarActionPerformed
-        String usuario = campoUsuario.getText();
-        try{
-            myTwitter.logar(usuario);
-            Principal prin = new Principal(usuario, myTwitter);
-            prin.setVisible(true);
-            this.dispose();
-        }catch(PIException ex){ 
-           JOptionPane.showMessageDialog(this, ex.getMessage());
-        }
+        logar();
     }//GEN-LAST:event_botaoEntrarActionPerformed
 
     private void botaoRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoRegistrarActionPerformed
         Registrar reg = new Registrar(myTwitter);
         reg.setVisible(true);
     }//GEN-LAST:event_botaoRegistrarActionPerformed
+
+    private void campoUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoUsuarioActionPerformed
+        logar();
+    }//GEN-LAST:event_campoUsuarioActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

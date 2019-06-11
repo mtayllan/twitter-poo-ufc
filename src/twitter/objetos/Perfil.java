@@ -23,6 +23,10 @@ public abstract class Perfil implements Serializable{
     public Perfil(String usuario){
         // verificar se já existe
         this.usuario = usuario;
+        ativo = true;
+        seguidos = new Vector<>();
+        seguidores = new Vector<>();
+        timeline = new Vector<>();
     }
     
     public void addSeguido(Perfil usuario){

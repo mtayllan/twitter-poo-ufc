@@ -5,11 +5,13 @@
  */
 package twitter.objetos;
 
+import java.io.Serializable;
+
 /**
  *
  * @author mtayllan
  */
-public class Tweet {
+public class Tweet implements Serializable{
     
     private String usuario;
     private String mensagem;

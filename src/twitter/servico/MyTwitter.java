@@ -154,4 +154,8 @@ public class MyTwitter implements ITwitter{
     public void gravar(){
         repositorio.gravar();
     }
+    
+    public Vector<Perfil> getUsuarios(){
+        return repositorio.getUsuarios();
+    }
 }

@@ -16,6 +16,10 @@ public class PessoaJuridica extends Perfil{
     public PessoaJuridica(String usuario) {
         super(usuario);
     }
+    
+    public PessoaJuridica(String usuario, boolean status) {
+        super(usuario, status);
+    }
 
     public long getCnpj() {
         return cnpj;

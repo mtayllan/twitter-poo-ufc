@@ -148,7 +148,6 @@ public class Registrar extends javax.swing.JFrame {
                 ((PessoaJuridica) perfil).setCnpj(id);
             }
             myTwitter.criarPerfil(perfil);
-            myTwitter.gravar();
             this.dispose();
         }catch(NumberFormatException ex){
             JOptionPane.showMessageDialog(this, "Número de Identificação mal formatado");

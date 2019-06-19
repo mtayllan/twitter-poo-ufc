@@ -21,9 +21,16 @@ public abstract class Perfil implements Serializable{
     private boolean ativo;
     
     public Perfil(String usuario){
-        // verificar se já existe
         this.usuario = usuario;
         ativo = true;
+        seguidos = new Vector<>();
+        seguidores = new Vector<>();
+        timeline = new Vector<>();
+    }
+    
+    public Perfil(String usuario, boolean ativo){
+        this.usuario = usuario;
+        this.ativo = ativo;
         seguidos = new Vector<>();
         seguidores = new Vector<>();
         timeline = new Vector<>();

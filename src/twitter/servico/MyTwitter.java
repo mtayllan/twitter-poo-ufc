@@ -6,13 +6,18 @@
 package twitter.servico;
 
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import twitter.excecoes.MFPException;
 import twitter.excecoes.PDException;
 import twitter.excecoes.PEException;
 import twitter.excecoes.PIException;
 import twitter.excecoes.SIException;
 import twitter.excecoes.UJCException;
+import twitter.excecoes.UNCException;
 import twitter.objetos.Perfil;
+import twitter.objetos.PessoaFisica;
+import twitter.objetos.PessoaJuridica;
 import twitter.objetos.Tweet;
 import twitter.repositorio.IRepositorioUsuario;
 
@@ -34,6 +39,7 @@ public class MyTwitter implements ITwitter{
         } catch (UJCException ex) {
             throw new PEException(usuario.getUsuario());
         }
+        repositorio.gravar();
     }
 
     @Override
@@ -44,7 +50,18 @@ public class MyTwitter implements ITwitter{
         }else if(!perfil.isAtivo()){
             throw new PDException(usuario);
         }
-        perfil.setAtivo(false);
+        Perfil p;
+        if (perfil instanceof PessoaJuridica){
+            p = new PessoaJuridica(usuario, false);
+        }else{
+            p = new PessoaFisica(usuario, false);
+        }
+        try {
+            repositorio.atualizar(p);
+        } catch (UNCException ex) {
+            throw new PIException(usuario);
+        }
+        repositorio.gravar();
     }
 
     @Override
@@ -57,7 +74,13 @@ public class MyTwitter implements ITwitter{
         }else if(mensagem.length()<1 && mensagem.length()>140){
             throw new MFPException(mensagem);
         }
-        perfil.getTimeline().add(new Tweet(usuario, mensagem));
+        Tweet tweet = new Tweet(usuario, mensagem);
+        perfil.getTimeline().add(tweet);
+        // propaga o tweet para seus seguidores
+        perfil.getSeguidores().forEach((p) -> {
+            p.getTimeline().add(tweet);
+        });
+        repositorio.gravar();
     }
 
     @Override
@@ -81,11 +104,9 @@ public class MyTwitter implements ITwitter{
         }
         // busca em todas as timelines?
         Vector<Tweet> tweets = new Vector<>();
-        for(Perfil p : repositorio.getUsuarios()){
-            for(Tweet tweet : p.getTimeline()){
-                if (tweet.getUsuario().equals(usuario)){
-                    tweets.add(tweet);
-                }
+        for(Tweet tweet : perfil.getTimeline()){
+            if (tweet.getUsuario().equals(usuario)){
+                tweets.add(tweet);
             }
         }
         return tweets;
@@ -100,9 +121,9 @@ public class MyTwitter implements ITwitter{
             throw new PDException(seguidor);
         }
         Perfil perfil2 = repositorio.buscar(seguido);
-        if (perfil1 == null){
+        if (perfil2 == null){
             throw new PIException(seguidor);
-        }else if(!perfil1.isAtivo()){
+        }else if(!perfil2.isAtivo()){
             throw new PDException(seguidor);
         }
         if (perfil1 == perfil2){
@@ -110,6 +131,7 @@ public class MyTwitter implements ITwitter{
         }
         perfil1.getSeguidos().add(perfil2);
         perfil2.getSeguidores().add(perfil1);
+        repositorio.gravar();
     }
 
     @Override
@@ -151,11 +173,32 @@ public class MyTwitter implements ITwitter{
         }
     }
     
-    public void gravar(){
-        repositorio.gravar();
-    }
-    
     public Vector<Perfil> getUsuarios(){
         return repositorio.getUsuarios();
+    }
+    
+    public Perfil getUsuario(String usuario) throws PIException {
+        Perfil perfil = repositorio.buscar(usuario);
+        if (perfil == null){
+            throw new PIException(usuario);
+        }
+        return perfil;
+        
+    }
+
+    @Override
+    public void atualizarPerfil(Perfil usuario) throws PIException, PDException {
+        Perfil novoPerfil = repositorio.buscar(usuario.getUsuario());
+        if (usuario == null){
+            throw new PIException(novoPerfil.getUsuario());
+        }else if(!usuario.isAtivo()){
+            throw new PDException(novoPerfil.getUsuario());
+        }
+        try {
+            repositorio.atualizar(novoPerfil);
+        } catch (UNCException ex) {
+            throw new PIException(novoPerfil.getUsuario());
+        }
+        repositorio.gravar();
     }
 }

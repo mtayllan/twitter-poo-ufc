@@ -18,6 +18,10 @@ public class PessoaFisica extends Perfil {
     public PessoaFisica(String usuario) {
         super(usuario);
     }
+    
+    public PessoaFisica(String usuario, boolean status) {
+        super(usuario, status);
+    }
 
     public long getCpf() {
         return cpf;

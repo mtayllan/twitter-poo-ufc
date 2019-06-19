@@ -10,46 +10,42 @@ import java.awt.Dimension;
 import java.util.Vector;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import twitter.excecoes.MFPException;
 import twitter.excecoes.PDException;
 import twitter.excecoes.PIException;
-import twitter.excecoes.SIException;
 import twitter.objetos.Perfil;
 import twitter.objetos.Tweet;
 import twitter.servico.MyTwitter;
 
 /**
  *
- * @author mtayl
+ * @author mtayllan
  */
-public class Principal extends javax.swing.JFrame {
+public class PerfilSeguido extends javax.swing.JFrame {
+
     private final String usuarioLogado;
+    private final String usuarioSeguido;
     private final MyTwitter myTwitter;
-    /**
-     * Creates new form Principal
-     * @param usuarioLogado
-     * @param myTwitter
-     */
-    public Principal(String usuarioLogado, MyTwitter myTwitter) {
-        initComponents();
+
+    public PerfilSeguido(String usuarioLogado, String usuarioSeguido, MyTwitter myTwitter) {
         this.usuarioLogado = usuarioLogado;
+        this.usuarioSeguido = usuarioSeguido;
         this.myTwitter = myTwitter;
+        initComponents();
         preencherStatus();
         preencherListaDeSeguidos();
-        preencherTimeLine();
+        preencherListaDeSeguidores();
         preencherMeusTweets();
     }
     
     private void preencherStatus(){
         try {
-            int qtdSeguidores = myTwitter.numeroSeguidores(usuarioLogado);
-            int qtdSeguidos = myTwitter.seguidos(usuarioLogado).size();
-            int qtdTweets = myTwitter.tweets(usuarioLogado).size();
+            int qtdSeguidores = myTwitter.numeroSeguidores(usuarioSeguido);
+            int qtdSeguidos = myTwitter.seguidos(usuarioSeguido).size();
+            int qtdTweets = myTwitter.tweets(usuarioSeguido).size();
             seguidoresTxt.setText(qtdSeguidores + " seguidores.");
             seguindoTxt.setText(qtdSeguidos + " seguindo");
-            usuarioTxt.setText("@"+usuarioLogado);
+            usuarioTxt.setText("@"+usuarioSeguido);
             tweetsTxt.setText(qtdTweets + " tweets");
         } catch (PIException | PDException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
@@ -57,10 +53,9 @@ public class Principal extends javax.swing.JFrame {
     }
     
     private void preencherListaDeSeguidos(){
-        painelUsuarios.removeAll();
         Vector<Perfil> usuarios;
         try {
-            usuarios = myTwitter.seguidos(usuarioLogado);
+            usuarios = myTwitter.seguidos(usuarioSeguido);
             for(Perfil perfil : usuarios){
                 JLabel label = new JLabel();
                 label.setHorizontalAlignment(SwingConstants.CENTER);
@@ -73,6 +68,7 @@ public class Principal extends javax.swing.JFrame {
                     public void mouseClicked(java.awt.event.MouseEvent evt) {
                         PerfilSeguido perfilSeguido = new PerfilSeguido(usuarioLogado, perfil.getUsuario(), myTwitter);
                         perfilSeguido.setVisible(true);
+                        PerfilSeguido.this.dispose();
                     }
                 });
                 painelUsuarios.add(label);
@@ -80,34 +76,39 @@ public class Principal extends javax.swing.JFrame {
         } catch (PIException | PDException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
-        painelUsuarios.updateUI();
     }
     
-    
-    private void preencherTimeLine(){
-        painelTimeLine.removeAll();
-        Vector<Tweet> tweets;
+    private void preencherListaDeSeguidores(){
+        Vector<Perfil> usuarios;
         try {
-            tweets = myTwitter.timeline(usuarioLogado);
-            for(Tweet tweet : tweets){
+            usuarios = myTwitter.seguidores(usuarioSeguido);
+            for(Perfil perfil : usuarios){
                 JLabel label = new JLabel();
-                label.setText("@" + tweet.getUsuario() + " - " + tweet.getMensagem());
-                label.setMaximumSize(new Dimension(1000, 40));
+                label.setHorizontalAlignment(SwingConstants.CENTER);
+                label.setText(perfil.getUsuario());
                 label.setForeground(new Color(0,172,237));
+                label.setMaximumSize(new Dimension(1000, 40));
                 label.setSize(1000,40);
-                painelTimeLine.add(label);
+                label.addMouseListener(new java.awt.event.MouseAdapter() {
+                    @Override
+                    public void mouseClicked(java.awt.event.MouseEvent evt) {
+                        PerfilSeguido perfilSeguido = new PerfilSeguido(usuarioLogado, perfil.getUsuario(), myTwitter);
+                        perfilSeguido.setVisible(true);
+                        PerfilSeguido.this.dispose();
+                    }
+                });
+                painelSeguidores.add(label);
             }
         } catch (PIException | PDException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
-        painelTimeLine.updateUI();
     }
     
     private void preencherMeusTweets(){
         painelTweets.removeAll();
         Vector<Tweet> tweets;
         try {
-            tweets = myTwitter.tweets(usuarioLogado);
+            tweets = myTwitter.tweets(usuarioSeguido);
             for(Tweet tweet : tweets){
                 JLabel label = new JLabel();
                 label.setText("@" + tweet.getUsuario() + " - " + tweet.getMensagem());
@@ -132,31 +133,41 @@ public class Principal extends javax.swing.JFrame {
     private void initComponents() {
 
         jLayeredPane1 = new javax.swing.JLayeredPane();
-        botaoSair = new javax.swing.JLabel();
         jLayeredPane2 = new javax.swing.JLayeredPane();
+        botaoSair = new javax.swing.JLabel();
+        jLayeredPane3 = new javax.swing.JLayeredPane();
         seguidoresTxt = new javax.swing.JLabel();
         tweetsTxt = new javax.swing.JLabel();
         seguindoTxt = new javax.swing.JLabel();
-        editarPerfil = new javax.swing.JButton();
         usuarioTxt = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         painelUsuarios = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
-        painelTimeLine = new javax.swing.JPanel();
+        painelSeguidores = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
         painelTweets = new javax.swing.JPanel();
-        addTweet = new javax.swing.JLabel();
-        addSeguido = new javax.swing.JLabel();
         seguidosTxt3 = new javax.swing.JLabel();
         seguidosTxt2 = new javax.swing.JLabel();
         seguidosTxt1 = new javax.swing.JLabel();
 
+        javax.swing.GroupLayout jLayeredPane1Layout = new javax.swing.GroupLayout(jLayeredPane1);
+        jLayeredPane1.setLayout(jLayeredPane1Layout);
+        jLayeredPane1Layout.setHorizontalGroup(
+            jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 718, Short.MAX_VALUE)
+        );
+        jLayeredPane1Layout.setVerticalGroup(
+            jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 527, Short.MAX_VALUE)
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLayeredPane1.setBackground(new java.awt.Color(0, 172, 237));
-        jLayeredPane1.setOpaque(true);
-        jLayeredPane1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jLayeredPane2.setBackground(new java.awt.Color(0, 172, 237));
+        jLayeredPane2.setOpaque(true);
+        jLayeredPane2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         botaoSair.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         botaoSair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/close_icon_24x24.png"))); // NOI18N
@@ -165,45 +176,35 @@ public class Principal extends javax.swing.JFrame {
                 botaoSairMouseClicked(evt);
             }
         });
-        jLayeredPane1.add(botaoSair, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 10, -1, -1));
+        jLayeredPane2.add(botaoSair, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 10, -1, -1));
 
-        jLayeredPane2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jLayeredPane3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         seguidoresTxt.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         seguidoresTxt.setForeground(new java.awt.Color(255, 255, 255));
         seguidoresTxt.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         seguidoresTxt.setText("Seguidores:");
-        jLayeredPane2.add(seguidoresTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 82, 179, 40));
+        jLayeredPane3.add(seguidoresTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 90, 179, 40));
 
         tweetsTxt.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         tweetsTxt.setForeground(new java.awt.Color(255, 255, 255));
         tweetsTxt.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         tweetsTxt.setText("Tweets");
-        jLayeredPane2.add(tweetsTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 82, 270, 40));
+        jLayeredPane3.add(tweetsTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 270, 40));
 
         seguindoTxt.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         seguindoTxt.setForeground(new java.awt.Color(255, 255, 255));
         seguindoTxt.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         seguindoTxt.setText("Seguindo:");
-        jLayeredPane2.add(seguindoTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 24, 179, 40));
-
-        editarPerfil.setBackground(java.awt.Color.white);
-        editarPerfil.setForeground(new java.awt.Color(0, 172, 237));
-        editarPerfil.setText("Perfil");
-        editarPerfil.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editarPerfilActionPerformed(evt);
-            }
-        });
-        jLayeredPane2.add(editarPerfil, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 20, 148, 50));
+        jLayeredPane3.add(seguindoTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 30, 179, 40));
 
         usuarioTxt.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         usuarioTxt.setForeground(new java.awt.Color(255, 255, 255));
         usuarioTxt.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         usuarioTxt.setText("Usuário:");
-        jLayeredPane2.add(usuarioTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 24, 270, 40));
+        jLayeredPane3.add(usuarioTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 270, 40));
 
-        jLayeredPane1.add(jLayeredPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, 139));
+        jLayeredPane2.add(jLayeredPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 660, 139));
 
         jScrollPane4.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jScrollPane4.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -213,16 +214,16 @@ public class Principal extends javax.swing.JFrame {
         painelUsuarios.setLayout(new javax.swing.BoxLayout(painelUsuarios, javax.swing.BoxLayout.Y_AXIS));
         jScrollPane4.setViewportView(painelUsuarios);
 
-        jLayeredPane1.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 223, 200, 280));
+        jLayeredPane2.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 223, 200, 280));
 
         jScrollPane5.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
-        painelTimeLine.setBackground(java.awt.Color.white);
-        painelTimeLine.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        painelTimeLine.setLayout(new javax.swing.BoxLayout(painelTimeLine, javax.swing.BoxLayout.Y_AXIS));
-        jScrollPane5.setViewportView(painelTimeLine);
+        painelSeguidores.setBackground(java.awt.Color.white);
+        painelSeguidores.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        painelSeguidores.setLayout(new javax.swing.BoxLayout(painelSeguidores, javax.swing.BoxLayout.Y_AXIS));
+        jScrollPane5.setViewportView(painelSeguidores);
 
-        jLayeredPane1.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 223, 200, 280));
+        jLayeredPane2.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 223, 200, 280));
 
         jScrollPane6.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
@@ -231,104 +232,44 @@ public class Principal extends javax.swing.JFrame {
         painelTweets.setLayout(new javax.swing.BoxLayout(painelTweets, javax.swing.BoxLayout.Y_AXIS));
         jScrollPane6.setViewportView(painelTweets);
 
-        jLayeredPane1.add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 223, 200, 280));
-
-        addTweet.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        addTweet.setForeground(new java.awt.Color(255, 255, 255));
-        addTweet.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        addTweet.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/add_icon_24x24.png"))); // NOI18N
-        addTweet.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                addTweetMouseClicked(evt);
-            }
-        });
-        jLayeredPane1.add(addTweet, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 190, 30, 30));
-
-        addSeguido.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        addSeguido.setForeground(new java.awt.Color(255, 255, 255));
-        addSeguido.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        addSeguido.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/add_icon_24x24.png"))); // NOI18N
-        addSeguido.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                addSeguidoMouseClicked(evt);
-            }
-        });
-        jLayeredPane1.add(addSeguido, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 190, 30, 30));
+        jLayeredPane2.add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 223, 200, 280));
 
         seguidosTxt3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         seguidosTxt3.setForeground(new java.awt.Color(255, 255, 255));
         seguidosTxt3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        seguidosTxt3.setText("Meus Tweets");
-        jLayeredPane1.add(seguidosTxt3, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 180, 160, 40));
+        seguidosTxt3.setText("Tweets");
+        jLayeredPane2.add(seguidosTxt3, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 180, 160, 40));
 
         seguidosTxt2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         seguidosTxt2.setForeground(new java.awt.Color(255, 255, 255));
         seguidosTxt2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        seguidosTxt2.setText("Timeline");
-        jLayeredPane1.add(seguidosTxt2, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 180, 90, 40));
+        seguidosTxt2.setText("Seguidores");
+        jLayeredPane2.add(seguidosTxt2, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 180, 120, 40));
 
         seguidosTxt1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         seguidosTxt1.setForeground(new java.awt.Color(255, 255, 255));
         seguidosTxt1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        seguidosTxt1.setText("Seguidos");
-        jLayeredPane1.add(seguidosTxt1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, 90, 40));
+        seguidosTxt1.setText("Seguindo");
+        jLayeredPane2.add(seguidosTxt1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, 90, 40));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLayeredPane1)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLayeredPane1)
-        );
+        getContentPane().add(jLayeredPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(2, 2, 720, 530));
 
-        setSize(new java.awt.Dimension(705, 512));
+        setSize(new java.awt.Dimension(718, 527));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void botaoSairMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botaoSairMouseClicked
         this.dispose();
     }//GEN-LAST:event_botaoSairMouseClicked
-
-    private void addSeguidoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addSeguidoMouseClicked
-        String usuario = JOptionPane.showInputDialog("Digite o nome do usuário que deseja seguir:");
-        try {
-            myTwitter.seguir(usuarioLogado, usuario);
-        } catch (PIException | PDException | SIException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage());
-        }
-        preencherListaDeSeguidos();
-    }//GEN-LAST:event_addSeguidoMouseClicked
-
-    private void addTweetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addTweetMouseClicked
-        String mensagem = JOptionPane.showInputDialog("Digite aqui sua mensagem");
-        try {
-            myTwitter.tweetar(usuarioLogado, mensagem);
-            preencherTimeLine();
-            preencherMeusTweets();
-        } catch (PIException | PDException | MFPException ex ) {
-            JOptionPane.showMessageDialog(this, ex.getMessage());
-        }
-    }//GEN-LAST:event_addTweetMouseClicked
-
-    private void editarPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarPerfilActionPerformed
-        PerfilEditar perfilEditar = new PerfilEditar(usuarioLogado, myTwitter);
-        perfilEditar.setVisible(true);
-    }//GEN-LAST:event_editarPerfilActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel addSeguido;
-    private javax.swing.JLabel addTweet;
     private javax.swing.JLabel botaoSair;
-    private javax.swing.JButton editarPerfil;
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JLayeredPane jLayeredPane2;
+    private javax.swing.JLayeredPane jLayeredPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JPanel painelTimeLine;
+    private javax.swing.JPanel painelSeguidores;
     private javax.swing.JPanel painelTweets;
     private javax.swing.JPanel painelUsuarios;
     private javax.swing.JLabel seguidoresTxt;

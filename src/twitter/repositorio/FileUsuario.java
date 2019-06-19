@@ -16,6 +16,8 @@ import java.util.Vector;
 import twitter.excecoes.UJCException;
 import twitter.excecoes.UNCException;
 import twitter.objetos.Perfil;
+import twitter.objetos.PessoaFisica;
+import twitter.objetos.PessoaJuridica;
 
 /**
  *
@@ -74,7 +76,12 @@ public class FileUsuario implements IRepositorioUsuario{
     public void atualizar(Perfil usuario) throws UNCException {
         Perfil antigo = buscar(usuario.getUsuario());
         if(antigo != null){
-            antigo = usuario;
+            antigo.setAtivo(usuario.isAtivo());
+            if (antigo instanceof PessoaFisica){
+                ((PessoaFisica) antigo).setCpf(((PessoaFisica) usuario).getCpf());
+            }else{
+                ((PessoaJuridica) antigo).setCnpj(((PessoaJuridica) usuario).getCnpj());
+            }
         }else{
             throw new UNCException(usuario.getUsuario());
         }

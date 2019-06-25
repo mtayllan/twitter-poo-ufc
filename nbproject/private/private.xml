@@ -3,9 +3,18 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/media/mtayllan/Programming/java/Twitter/src/twitter/ui/PerfilEditar.java</file>
-            <file>file:/media/mtayllan/Programming/java/Twitter/src/twitter/ui/PerfilSeguido.java</file>
-            <file>file:/media/mtayllan/Programming/java/Twitter/src/twitter/servico/MyTwitter.java</file>
+            <file>file:/P:/java/Twitter/src/twitter/ui/Registrar.java</file>
+            <file>file:/P:/java/Twitter/src/twitter/objetos/Tweet.java</file>
+            <file>file:/P:/java/Twitter/src/twitter/ui/Principal.java</file>
+            <file>file:/P:/java/Twitter/src/twitter/servico/MyTwitter.java</file>
+            <file>file:/P:/java/Twitter/src/twitter/Twitter.java</file>
+            <file>file:/P:/java/Twitter/src/twitter/objetos/Perfil.java</file>
+            <file>file:/P:/java/Twitter/src/twitter/servico/ITwitter.java</file>
+            <file>file:/P:/java/Twitter/src/twitter/ui/PerfilEditar.java</file>
+            <file>file:/P:/java/Twitter/src/twitter/repositorio/IRepositorioUsuario.java</file>
+            <file>file:/P:/java/Twitter/src/twitter/repositorio/FileUsuario.java</file>
+            <file>file:/P:/java/Twitter/src/twitter/objetos/PessoaJuridica.java</file>
+            <file>file:/P:/java/Twitter/src/twitter/ui/Login.java</file>
         </group>
     </open-files>
 </project-private>

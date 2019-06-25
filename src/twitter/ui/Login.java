@@ -5,7 +5,10 @@
  */
 package twitter.ui;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import twitter.excecoes.PDException;
 import twitter.excecoes.PIException;
 import twitter.servico.MyTwitter;
 
@@ -31,7 +34,7 @@ public class Login extends javax.swing.JFrame {
             Principal prin = new Principal(usuario, myTwitter);
             prin.setVisible(true);
             this.dispose();
-        }catch(PIException ex){ 
+        }catch(PIException | PDException ex){ 
            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }

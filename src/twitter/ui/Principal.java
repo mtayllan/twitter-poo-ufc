@@ -81,6 +81,7 @@ public class Principal extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
         painelUsuarios.updateUI();
+        preencherStatus();
     }
     
     
@@ -101,6 +102,7 @@ public class Principal extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
         painelTimeLine.updateUI();
+        preencherStatus();
     }
     
     private void preencherMeusTweets(){
@@ -120,6 +122,7 @@ public class Principal extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
         painelTweets.updateUI();
+        preencherStatus();
     }
 
     /**

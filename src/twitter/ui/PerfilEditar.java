@@ -94,15 +94,12 @@ public class PerfilEditar extends javax.swing.JFrame {
             }
         });
         jLayeredPane1.add(btnSalvar, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 240, 148, 50));
-
-        idTextField.setForeground(java.awt.Color.white);
         jLayeredPane1.add(idTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 90, 260, -1));
 
         jLabel3.setForeground(java.awt.Color.white);
         jLabel3.setText("CPF/CNPJ:");
         jLayeredPane1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 100, -1));
 
-        chkIsAtivo.setForeground(java.awt.Color.white);
         chkIsAtivo.setText("Ativo?");
         jLayeredPane1.add(chkIsAtivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 180, -1, -1));
 
@@ -117,7 +114,8 @@ public class PerfilEditar extends javax.swing.JFrame {
             .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 301, Short.MAX_VALUE)
         );
 
-        setBounds(0, 0, 383, 301);
+        setSize(new java.awt.Dimension(383, 301));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void botaoSairMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botaoSairMouseClicked
@@ -140,6 +138,7 @@ public class PerfilEditar extends javax.swing.JFrame {
         } catch (PIException | PDException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage());
         }
+        JOptionPane.showMessageDialog(null, "Perfil Atualizado");
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

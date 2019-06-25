@@ -71,7 +71,7 @@ public abstract class Perfil implements Serializable{
     }
     
     public void setAtivo(boolean valor){
-        this.ativo = ativo;
+        ativo = valor;
     }
 
     public boolean isAtivo() {

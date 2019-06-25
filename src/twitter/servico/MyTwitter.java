@@ -167,9 +167,12 @@ public class MyTwitter implements ITwitter{
         return perfil.getSeguidos();
     }
     
-    public void logar(String usuario) throws PIException{
-        if(repositorio.buscar(usuario) == null){
+    public void logar(String usuario) throws PIException, PDException{
+        Perfil perfil = repositorio.buscar(usuario);
+        if (perfil == null){
             throw new PIException(usuario);
+        }else if(!perfil.isAtivo()){
+            throw new PDException(usuario);
         }
     }
     
@@ -188,16 +191,16 @@ public class MyTwitter implements ITwitter{
 
     @Override
     public void atualizarPerfil(Perfil usuario) throws PIException, PDException {
-        Perfil novoPerfil = repositorio.buscar(usuario.getUsuario());
-        if (usuario == null){
-            throw new PIException(novoPerfil.getUsuario());
-        }else if(!usuario.isAtivo()){
-            throw new PDException(novoPerfil.getUsuario());
+        Perfil perfil = repositorio.buscar(usuario.getUsuario());
+        if (perfil == null){
+            throw new PIException(usuario.getUsuario());
+        }else if(!perfil.isAtivo()){
+            throw new PDException(usuario.getUsuario());
         }
         try {
-            repositorio.atualizar(novoPerfil);
+            repositorio.atualizar(usuario);
         } catch (UNCException ex) {
-            throw new PIException(novoPerfil.getUsuario());
+            throw new PIException(usuario.getUsuario());
         }
         repositorio.gravar();
     }
